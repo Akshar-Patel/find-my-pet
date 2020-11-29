@@ -214,9 +214,13 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 SizedBox(
                     width: 125,
-                    height: 180,
-                    child: Image.network(state.dogBreeds[index].image,
-                        fit: BoxFit.cover)),
+                    height: 200,
+                    child:
+                    FadeInImage.assetNetwork(
+                      fit: BoxFit.cover,
+                      placeholder: "assets/loading.gif",
+                      image: state.dogBreeds[index].image,
+                    )),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
