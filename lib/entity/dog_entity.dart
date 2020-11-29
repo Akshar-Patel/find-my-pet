@@ -2,11 +2,12 @@ import 'package:equatable/equatable.dart';
 
 class DogEntity extends Equatable {
   final String image;
+  final String name;
 
-  DogEntity(this.image);
+  DogEntity(this.image, this.name);
 
   @override
-  List<Object> get props => [image];
+  List<Object> get props => [image,name];
 
   Map<String, Object> toJson() {
     return {
@@ -14,6 +15,10 @@ class DogEntity extends Equatable {
     };
   }
   static DogEntity fromJson(String image) {
-    return DogEntity(image);
+    return DogEntity(image, extractName(image));
+  }
+
+  static String extractName(String image) {
+    return image.split("/")[4];
   }
 }

@@ -5,14 +5,15 @@ import 'package:meta/meta.dart';
 class DogBreed {
 
   final String image;
+  final String name;
 
-  DogBreed(this.image);
+  DogBreed(this.image, this.name);
 
   DogEntity toEntity() {
-    return DogEntity(image);
+    return DogEntity(image, this.name);
     }
 
   static DogBreed fromEntity(DogEntity entity) {
-    return DogBreed(entity.image);
+    return DogBreed(entity.image, entity.name);
   }
 }
