@@ -74,13 +74,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       create: (context) {
                         return DogBreedBloc(
                           dogBreedRepository: DogBreedRepository(),
-                        )..add(LoadDogBreeds());
+                        )..add(LoadDogBreedList());
                       },
                     )
                   ],
-                  child: BlocBuilder<DogBreedBloc, DogBreedState>(
+                  child: BlocBuilder<DogBreedBloc, DogBreedListState>(
                       builder: (context, state) {
-                        if (state is DogBreedLoadSuccess) {
+                        if (state is DogBreedListLoadSuccess) {
                           return Container(
                             color: Constants.primaryColor,
                             child: Stack(children: [
@@ -149,9 +149,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               )]),
                           );
-                        } else if (state is DogBreedLoadInProgress) {
+                        } else if (state is DogBreedListLoadInProgress) {
                           return Center(child: CircularProgressIndicator());
-                        } else if (state is DogBreedsLoadFailure){
+                        } else if (state is DogBreedListLoadFailure){
                           return Center(child: Text("failed to load data"),);
                         } else {
                           return Container();
@@ -191,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  ListView buildDogBreedList(DogBreedLoadSuccess state) {
+  ListView buildDogBreedList(DogBreedListLoadSuccess state) {
     return ListView.builder(
       padding: EdgeInsets.only(top: 0),
         itemCount: state.dogBreeds.length,
@@ -200,7 +200,7 @@ class _HomeScreenState extends State<HomeScreen> {
         });
   }
 
-  Widget buildDogBreedItem(DogBreedLoadSuccess state, int index) {
+  Widget buildDogBreedItem(DogBreedListLoadSuccess state, int index) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 32),
       child: Card(

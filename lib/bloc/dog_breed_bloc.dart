@@ -7,46 +7,46 @@ import 'package:bloc/bloc.dart';
 import 'dog_breed_event.dart';
 import 'dog_breed_state.dart';
 
-class DogBreedBloc extends Bloc<DogBreedEvent, DogBreedState> {
+class DogBreedBloc extends Bloc<DogBreedListEvent, DogBreedListState> {
   final DogBreedRepository dogBreedRepository;
   StreamSubscription _dogBreedSubscription;
 
   DogBreedBloc({@required this.dogBreedRepository})
-      : super(DogBreedLoadInProgress());
+      : super(DogBreedListLoadInProgress());
 
   @override
-  Stream<DogBreedState> mapEventToState(DogBreedEvent event) async* {
-    if (event is LoadDogBreeds) {
-      yield* _mapLoadTransactionState();
+  Stream<DogBreedListState> mapEventToState(DogBreedListEvent event) async* {
+    if (event is LoadDogBreedList) {
+      yield* _mapLoadDogBreedState();
     }
-    if (event is UpdateDogBreed) {
-      yield* _mapUpdateTransactionState(event);
+    if (event is UpdateDogBreedList) {
+      yield* _mapUpdateDogBreedState(event);
     }
-    if (event is FailedDogBreeds) {
+    if (event is FailedToLoadDogBreedList) {
       yield* _mapFailedDogBreedsState(event);
     }
   }
 
-  Stream<DogBreedState> _mapLoadTransactionState() async* {
+  Stream<DogBreedListState> _mapLoadDogBreedState() async* {
     _dogBreedSubscription?.cancel();
-    _dogBreedSubscription = dogBreedRepository.loadTransactions().listen(
+    _dogBreedSubscription = dogBreedRepository.loadDogBreeds().listen(
           (dogBreeds) {
-            add(UpdateDogBreed(dogBreeds));
+            add(UpdateDogBreedList(dogBreeds));
           },
       onError:(Object error, StackTrace stackTrace){
-            add(FailedDogBreeds());
+            add(FailedToLoadDogBreedList());
       }
     );
   }
 
-  Stream<DogBreedState> _mapUpdateTransactionState(
-      UpdateDogBreed event) async* {
-    yield DogBreedLoadSuccess(event.dogBreedList);
+  Stream<DogBreedListState> _mapUpdateDogBreedState(
+      UpdateDogBreedList event) async* {
+    yield DogBreedListLoadSuccess(event.dogBreedList);
   }
 
-  Stream<DogBreedState> _mapFailedDogBreedsState(
-      FailedDogBreeds event) async* {
-    yield DogBreedsLoadFailure();
+  Stream<DogBreedListState> _mapFailedDogBreedsState(
+      FailedToLoadDogBreedList event) async* {
+    yield DogBreedListLoadFailure();
   }
 
   @override
