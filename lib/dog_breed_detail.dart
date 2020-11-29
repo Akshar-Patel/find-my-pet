@@ -24,9 +24,10 @@ class _DogBreedDetailScreenState extends State<DogBreedDetailScreen> {
         children: [
           Container(
             height: 500,
+            width: MediaQuery.of(context).size.width,
             child: Image.network(
               args.image,
-              fit: BoxFit.fitHeight,
+              fit: BoxFit.cover,
             ),
           ),
           Container(
@@ -107,7 +108,7 @@ class _DogBreedDetailScreenState extends State<DogBreedDetailScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  args.location,
+                                  "Ubicacion: "+ args.location,
                                   style: TextStyle(
                                       fontSize: 18, fontWeight: FontWeight.bold),
                                 ),
