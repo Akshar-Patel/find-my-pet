@@ -15,10 +15,6 @@ class DogEntity extends Equatable {
   @override
   List<Object> get props => [image, name, description];
 
-  Map<String, Object> toJson() {
-    return {'image': image};
-  }
-
   static DogEntity fromJson(String image) {
     return DogEntity(image, extractName(image), dummyDescription(), randomLocation());
   }

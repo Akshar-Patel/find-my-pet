@@ -10,7 +10,7 @@ class DogBreedRepository{
     this.apiClient = ApiClient();
   }
 
-  Stream<List<DogBreed>> loadTransactions() async* {
+  Stream<List<DogBreed>> loadDogBreeds() async* {
     yield* apiClient.fetchDogBreeds();
   }
 }
