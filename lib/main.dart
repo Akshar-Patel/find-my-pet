@@ -16,7 +16,7 @@ class FindMyPetApp extends StatelessWidget {
     return MaterialApp(
       title: 'Find My Pet',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primaryColor: Color(0xFF2741F9),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: HomeScreen(),
@@ -38,7 +38,29 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Find My Pet"),
+        leading: IconButton(
+          icon: Icon(Icons.menu), onPressed: () {  },),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("Find my ", style: TextStyle(
+              fontSize: 20,
+              foreground: Paint()
+                ..color = Colors.white,
+            )),
+            Text("pet", style: TextStyle(
+              fontSize: 20,
+              foreground: Paint()
+                ..style = PaintingStyle.stroke
+                ..strokeWidth = 1
+                ..color = Colors.white,
+            ))
+          ],
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.send), onPressed: () {  },)
+        ],
       ),
       body: MultiBlocProvider(
         providers:[
@@ -53,20 +75,27 @@ class _HomeScreenState extends State<HomeScreen> {
         child: BlocBuilder<DogBreedBloc, DogBreedState>(
           builder: (context, state){
             if(state is DogBreedLoadSuccess){
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(state.dogBreeds.first.image),
-                  ],
-                ),
-              );
+              return buildDogBreedList(state);
             }else {
+              //TODO: handle loading
               return Container();
             }
           }
         ),
       ),
     );
+  }
+
+  ListView buildDogBreedList(DogBreedLoadSuccess state) {
+    return ListView.builder(
+                itemCount: state.dogBreeds.length,
+                itemBuilder: (context, index) {
+                  return buildDogBreedItem(
+                      state, index);
+                });
+  }
+
+  Widget buildDogBreedItem(DogBreedLoadSuccess state, int index) {
+    return Text(state.dogBreeds[index].name);
   }
 }
