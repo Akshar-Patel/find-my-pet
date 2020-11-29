@@ -1,4 +1,6 @@
+import 'package:basic_utils/basic_utils.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 
 class DogEntity extends Equatable {
   final String image;
@@ -19,6 +21,8 @@ class DogEntity extends Equatable {
   }
 
   static String extractName(String image) {
-    return image.split("/")[4];
+    String name = image.split("/")[4].replaceAll("-", " ");
+    name = StringUtils.capitalize(name, allWords: true);
+    return name;
   }
 }
