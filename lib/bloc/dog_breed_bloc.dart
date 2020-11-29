@@ -22,18 +22,31 @@ class DogBreedBloc extends Bloc<DogBreedEvent, DogBreedState> {
     if (event is UpdateDogBreed) {
       yield* _mapUpdateTransactionState(event);
     }
+    if (event is FailedDogBreeds) {
+      yield* _mapFailedDogBreedsState(event);
+    }
   }
 
   Stream<DogBreedState> _mapLoadTransactionState() async* {
     _dogBreedSubscription?.cancel();
     _dogBreedSubscription = dogBreedRepository.loadTransactions().listen(
-          (todos) => add(UpdateDogBreed(todos)),
-        );
+          (dogBreeds) {
+            add(UpdateDogBreed(dogBreeds));
+          },
+      onError:(Object error, StackTrace stackTrace){
+            add(FailedDogBreeds());
+      }
+    );
   }
 
   Stream<DogBreedState> _mapUpdateTransactionState(
       UpdateDogBreed event) async* {
     yield DogBreedLoadSuccess(event.dogBreedList);
+  }
+
+  Stream<DogBreedState> _mapFailedDogBreedsState(
+      FailedDogBreeds event) async* {
+    yield DogBreedsLoadFailure();
   }
 
   @override

@@ -19,3 +19,5 @@ class UpdateDogBreed extends DogBreedEvent {
   @override
   List<Object> get props => [dogBreedList];
 }
+
+class FailedDogBreeds extends DogBreedEvent {}
