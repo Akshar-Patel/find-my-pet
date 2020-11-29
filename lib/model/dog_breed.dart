@@ -6,14 +6,16 @@ class DogBreed {
 
   final String image;
   final String name;
+  final String description;
+  final String location;
 
-  DogBreed(this.image, this.name);
+  DogBreed(this.image, this.name, this.description, this.location);
 
   DogEntity toEntity() {
-    return DogEntity(image, this.name);
+    return DogEntity(image, this.name, this.description, this.location);
     }
 
   static DogBreed fromEntity(DogEntity entity) {
-    return DogBreed(entity.image, entity.name);
+    return DogBreed(entity.image, entity.name, entity.description,entity.location);
   }
 }
