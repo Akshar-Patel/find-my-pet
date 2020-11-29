@@ -213,8 +213,8 @@ class _HomeScreenState extends State<HomeScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                    width: 125,
-                    height: 200,
+                    width: MediaQuery.of(context).size.width * 0.30,
+                    height: MediaQuery.of(context).size.height * 0.25,
                     child:
                     FadeInImage.assetNetwork(
                       fit: BoxFit.cover,
