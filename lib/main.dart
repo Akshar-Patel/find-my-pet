@@ -5,6 +5,7 @@ import 'package:find_my_pet/bloc/dog_breed_state.dart';
 import 'package:find_my_pet/dog_breed_detail.dart';
 import 'package:find_my_pet/dog_breed_detail_arguments.dart';
 import 'package:find_my_pet/repository/dog_breed_repository.dart';
+import 'package:find_my_pet/sample.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -45,6 +46,9 @@ class _HomeScreenState extends State<HomeScreen> {
         body: Navigator(
             key: _navigatorKey,
             initialRoute: '/',
+            observers: [
+              HeroController(),
+            ],
             onGenerateRoute: (RouteSettings settings) {
               WidgetBuilder builder;
               switch (settings.name) {
@@ -201,67 +205,70 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget buildDogBreedItem(DogBreedListLoadSuccess state, int index) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 32),
-      child: Card(
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          elevation: 5,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0),
-          ),
-          child: InkWell(
-            splashColor: Colors.grey.withAlpha(30),
-            onTap: () {
-              _navigatorKey.currentState.pushNamed('/details',
-                  arguments: DogBreedDetailArguments(state.dogBreeds[index].name,
-                      state.dogBreeds[index].image,
-                  state.dogBreeds[index].description,
-              state.dogBreeds[index].location));
-            },
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.30,
-                    height: MediaQuery.of(context).size.height * 0.25,
-                    child:
-                    FadeInImage.assetNetwork(
-                      fit: BoxFit.cover,
-                      placeholder: "assets/loading.gif",
-                      image: state.dogBreeds[index].image,
-                    )),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      children: [
-                        Align(
-                            child: Icon(Icons.favorite_border, size: 16,),
-                            alignment: Alignment.topRight),
-                        Align(
-                          child: Text(
-                            state.dogBreeds[index].name,
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+    return Hero(
+      tag: state.dogBreeds[index].image,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 32),
+        child: Card(
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+            child: InkWell(
+              splashColor: Colors.grey.withAlpha(30),
+              onTap: () {
+                _navigatorKey.currentState.pushNamed('/details',
+                    arguments: DogBreedDetailArguments(state.dogBreeds[index].name,
+                        state.dogBreeds[index].image,
+                    state.dogBreeds[index].description,
+                state.dogBreeds[index].location));
+              },
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.30,
+                      height: MediaQuery.of(context).size.height * 0.25,
+                      child:
+                      FadeInImage.assetNetwork(
+                        fit: BoxFit.cover,
+                        placeholder: "assets/loading.gif",
+                        image: state.dogBreeds[index].image,
+                      )),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        children: [
+                          Align(
+                              child: Icon(Icons.favorite_border, size: 16,),
+                              alignment: Alignment.topRight),
+                          Align(
+                            child: Text(
+                              state.dogBreeds[index].name,
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                            ),
+                            alignment: Alignment.topLeft,
                           ),
-                          alignment: Alignment.topLeft,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Align(
-                              alignment: Alignment.topLeft,
-                              child: Text("Ubicacion: ${state.dogBreeds[index].location}",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w700
-                                ),)),
-                        ),
-                        Text(state.dogBreeds[index].description)
-                      ],
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Align(
+                                alignment: Alignment.topLeft,
+                                child: Text("Ubicacion: ${state.dogBreeds[index].location}",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700
+                                  ),)),
+                          ),
+                          Text(state.dogBreeds[index].description)
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          )),
+                ],
+              ),
+            )),
+      ),
     );
   }
 }

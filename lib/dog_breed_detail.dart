@@ -26,9 +26,12 @@ class _DogBreedDetailScreenState extends State<DogBreedDetailScreen> {
             Container(
               height: 500,
               width: MediaQuery.of(context).size.width,
-              child: Image.network(
-                args.image,
-                fit: BoxFit.cover,
+              child: Hero(
+                tag: args.image,
+                child: Image.network(
+                  args.image,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             Container(
