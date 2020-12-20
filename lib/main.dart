@@ -1,11 +1,9 @@
-import 'package:find_my_pet/api/api_client.dart';
 import 'package:find_my_pet/bloc/dog_breed_bloc.dart';
 import 'package:find_my_pet/bloc/dog_breed_event.dart';
 import 'package:find_my_pet/bloc/dog_breed_state.dart';
 import 'package:find_my_pet/dog_breed_detail.dart';
 import 'package:find_my_pet/dog_breed_detail_arguments.dart';
 import 'package:find_my_pet/repository/dog_breed_repository.dart';
-import 'package:find_my_pet/sample.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -37,131 +35,131 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   final _navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Navigator(
-            key: _navigatorKey,
-            initialRoute: '/',
-            observers: [
-              HeroController(),
-            ],
-            onGenerateRoute: (RouteSettings settings) {
-              WidgetBuilder builder;
-              switch (settings.name) {
-                case '/':
-                  builder = (BuildContext context) => buildDogBreedCardList();
-                  break;
-                case '/details':
-                  builder = (BuildContext context) => DogBreedDetailScreen();
-                  break;
-                default:
-                  throw Exception('Invalid route: ${settings.name}');
-              }
-              return MaterialPageRoute(
-                builder: builder,
-                settings: settings,
-              );
+      body: Navigator(
+          key: _navigatorKey,
+          initialRoute: '/',
+          observers: [
+            HeroController(),
+          ],
+          onGenerateRoute: (RouteSettings settings) {
+            WidgetBuilder builder;
+            switch (settings.name) {
+              case '/':
+                builder = (BuildContext context) => buildDogBreedCardList();
+                break;
+              case '/details':
+                builder = (BuildContext context) => DogBreedDetailScreen();
+                break;
+              default:
+                throw Exception('Invalid route: ${settings.name}');
             }
-        ),
-        bottomNavigationBar: buildBottomNavigationBar(),
-        );
+            return MaterialPageRoute(
+              builder: builder,
+              settings: settings,
+            );
+          }),
+      bottomNavigationBar: buildBottomNavigationBar(),
+    );
   }
 
   MultiBlocProvider buildDogBreedCardList() {
     return MultiBlocProvider(
-                  providers: [
-                    BlocProvider<DogBreedBloc>(
-                      create: (context) {
-                        return DogBreedBloc(
-                          dogBreedRepository: DogBreedRepository(),
-                        )..add(LoadDogBreedList());
-                      },
+      providers: [
+        BlocProvider<DogBreedBloc>(
+          create: (context) {
+            return DogBreedBloc(
+              dogBreedRepository: DogBreedRepository(),
+            )..add(LoadDogBreedList());
+          },
+        )
+      ],
+      child: BlocBuilder<DogBreedBloc, DogBreedListState>(
+          builder: (context, state) {
+        if (state is DogBreedListLoadSuccess) {
+          return Container(
+            color: Constants.primaryColor,
+            child: Stack(children: [
+              Container(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Text("Animales perdidos",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              foreground: Paint()
+                                ..color = Constants.primaryColor,
+                            )),
+                      ),
+                      Expanded(
+                          child: Padding(
+                        padding: const EdgeInsets.only(left: 32, right: 32),
+                        child: buildDogBreedList(state),
+                      ))
+                    ],
+                  ),
+                  margin: EdgeInsets.only(top: 120),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30),
+                        topRight: Radius.circular(30),
+                      ))),
+              Positioned(
+                top: 0.0,
+                left: 0.0,
+                right: 0.0,
+                child: AppBar(
+                  leading: IconButton(
+                    icon: Icon(Icons.menu),
+                    onPressed: () {},
+                  ),
+                  elevation: 0,
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Find my ",
+                          style: TextStyle(
+                            fontSize: 20,
+                            foreground: Paint()..color = Colors.white,
+                          )),
+                      Text("pet",
+                          style: TextStyle(
+                            fontSize: 20,
+                            foreground: Paint()
+                              ..style = PaintingStyle.stroke
+                              ..strokeWidth = 1
+                              ..color = Colors.white,
+                          ))
+                    ],
+                  ),
+                  actions: [
+                    IconButton(
+                      icon: Icon(Icons.send),
+                      onPressed: () {},
                     )
                   ],
-                  child: BlocBuilder<DogBreedBloc, DogBreedListState>(
-                      builder: (context, state) {
-                        if (state is DogBreedListLoadSuccess) {
-                          return Container(
-                            color: Constants.primaryColor,
-                            child: Stack(children: [
-                              Container(
-                                  child: Column(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(16.0),
-                                        child: Text("Animales perdidos",
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold,
-                                              foreground: Paint()
-                                                ..color = Constants.primaryColor,
-                                            )),
-                                      ),
-                                      Expanded(
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(left: 32, right: 32),
-                                            child: buildDogBreedList(state),
-                                          ))
-                                    ],
-                                  ),
-                                  margin: EdgeInsets.only(top: 120),
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(30),
-                                        topRight: Radius.circular(30),
-                                      )))
-                            ,
-                              Positioned(
-                                top: 0.0,
-                                left: 0.0,
-                                right: 0.0,
-                                child: AppBar(
-                                  leading: IconButton(
-                                    icon: Icon(Icons.menu),
-                                    onPressed: () {},
-                                  ),
-                                  elevation: 0,
-                                  title: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text("Find my ",
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            foreground: Paint()..color = Colors.white,
-                                          )),
-                                      Text("pet",
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            foreground: Paint()
-                                              ..style = PaintingStyle.stroke
-                                              ..strokeWidth = 1
-                                              ..color = Colors.white,
-                                          ))
-                                    ],
-                                  ),
-                                  actions: [
-                                    IconButton(
-                                      icon: Icon(Icons.send),
-                                      onPressed: () {},
-                                    )
-                                  ],
-                                ),
-                              )]),
-                          );
-                        } else if (state is DogBreedListLoadInProgress) {
-                          return Center(child: CircularProgressIndicator());
-                        } else if (state is DogBreedListLoadFailure){
-                          return Center(child: Text("failed to load data"),);
-                        } else {
-                          return Container();
-                        }
-                      }),
-                );
+                ),
+              )
+            ]),
+          );
+        } else if (state is DogBreedListLoadInProgress) {
+          return Center(child: CircularProgressIndicator());
+        } else if (state is DogBreedListLoadFailure) {
+          return Center(
+            child: Text("failed to load data"),
+          );
+        } else {
+          return Container();
+        }
+      }),
+    );
   }
 
   static BottomNavigationBar buildBottomNavigationBar() {
@@ -197,7 +195,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   ListView buildDogBreedList(DogBreedListLoadSuccess state) {
     return ListView.builder(
-      padding: EdgeInsets.only(top: 0),
+        padding: EdgeInsets.only(top: 0),
         itemCount: state.dogBreeds.length,
         itemBuilder: (context, index) {
           return buildDogBreedItem(state, index);
@@ -219,10 +217,11 @@ class _HomeScreenState extends State<HomeScreen> {
               splashColor: Colors.grey.withAlpha(30),
               onTap: () {
                 _navigatorKey.currentState.pushNamed('/details',
-                    arguments: DogBreedDetailArguments(state.dogBreeds[index].name,
+                    arguments: DogBreedDetailArguments(
+                        state.dogBreeds[index].name,
                         state.dogBreeds[index].image,
-                    state.dogBreeds[index].description,
-                state.dogBreeds[index].location));
+                        state.dogBreeds[index].description,
+                        state.dogBreeds[index].location));
               },
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -230,8 +229,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(
                       width: MediaQuery.of(context).size.width * 0.30,
                       height: MediaQuery.of(context).size.height * 0.25,
-                      child:
-                      FadeInImage.assetNetwork(
+                      child: FadeInImage.assetNetwork(
                         fit: BoxFit.cover,
                         placeholder: "assets/loading.gif",
                         image: state.dogBreeds[index].image,
@@ -242,12 +240,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Column(
                         children: [
                           Align(
-                              child: Icon(Icons.favorite_border, size: 16,),
+                              child: Icon(
+                                Icons.favorite_border,
+                                size: 16,
+                              ),
                               alignment: Alignment.topRight),
                           Align(
                             child: Text(
                               state.dogBreeds[index].name,
-                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 16),
                             ),
                             alignment: Alignment.topLeft,
                           ),
@@ -255,10 +257,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             padding: const EdgeInsets.only(top: 8.0),
                             child: Align(
                                 alignment: Alignment.topLeft,
-                                child: Text("Ubicacion: ${state.dogBreeds[index].location}",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w700
-                                  ),)),
+                                child: Text(
+                                  "Ubicacion: ${state.dogBreeds[index].location}",
+                                  style: TextStyle(fontWeight: FontWeight.w700),
+                                )),
                           ),
                           Text(state.dogBreeds[index].description)
                         ],
